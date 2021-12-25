@@ -5,9 +5,9 @@
 ## Installation
 
 
-* run `composer update` to generate depedencies in vendor folder
 * change `.env.example` to `.env`
 * configure `.env`
+* run `composer update` to generate depedencies in vendor folder
 * run `php artisan key:generate`
 * run `php artisan migrate`
 * run `npm install`
