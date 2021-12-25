@@ -6,6 +6,8 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use ZipArchive;
 
 class UpdateManager {
@@ -26,6 +28,11 @@ class UpdateManager {
         'config.json',
         'theme.default.json',
         '.editorconfig',
+        '.env.example',
+        '.gitignore',
+        '.gitattributes',
+        '.gitmodules',
+        '.styleci.yml',
     ];
 
     public function __construct(Filesystem $files) {
@@ -72,6 +79,7 @@ class UpdateManager {
         if(!empty($versions)) {
             return $versions;
         }
+        dd($versions);
         throw new \Exception('No versions availaible in repository.');
         
     }
@@ -127,7 +135,7 @@ class UpdateManager {
             $this->files->makeDirectory($this->downloadPath);
         }
 
-        $downloadPath = $this->downloadPath . DIRECTORY_SEPARATOR . $version . '.zip';
+        $downloadPath = $this->downloadPath . $version . '.zip';
 
         if ($this->files->exists($downloadPath)) {
             $this->files->delete($downloadPath);
@@ -139,9 +147,11 @@ class UpdateManager {
                 'sink' => $downloadPath,
             ])
             ->get("https://github.com/{$this->source['owner']}/{$this->source['repository']}/archive/{$version}.zip");
-            var_dump($this->downloadPath . '/' . $version . '.zip');
         if ($downloadRequest->ok()) {
-            return $downloadPath;
+            return [
+                'version' => $version,
+                'downloadPath' => $downloadPath
+            ];
         }
         return false;
 
@@ -149,85 +159,61 @@ class UpdateManager {
 
     public function update($version = null) {
 
-        $zipFile = $this->downloadUpdate($version);
-
+        $update = $this->downloadUpdate($version);
+        $version = $update['version'];
+        $zipFile = $update['downloadPath'];
+        
         if (!$zipFile) {
             return false;
         }
 
-        // Get this extension updated
-
-        // $zip = new ZipArchive;
-        // if ($zip->open($zipFile) !== true) return false;
-        // $path = base_path('app/Extensions/UpdateManager.php');
-        // $newContent = $zip->getFromName("{$this->source['repository']}-{$this->version}{$path}");
-        // file_put_contents(base_path($path), $newContent);
-        // $zip->close();
-        // return true;
-
         $zip = new ZipArchive;
         if ($zip->open($zipFile) !== true) return false;
         $updateFolder = $this->source['repository'] . "-" . $version;
+        $zip->extractTo(base_path('tmp/' ));
         $updateFile = [];
         for ($i = 0; $i < $zip->numFiles; $i++) {
-            // Get some infos on file
             $filename = $zip->getNameIndex($i);
             $stats = $zip->statIndex($i);
             $fileinfo = pathinfo($filename);
-            // We remove github root folder from name
             $filename = substr($filename, strlen("{$updateFolder}/"));
             $dirname = substr($fileinfo['dirname'], strlen("{$updateFolder}/"));
-            // We check if that file need to be updated or not
             if (in_array($filename, $this->bypassFiles)) continue;
-            // If the folder doesn't exist, create it recursively
             if (!is_dir(base_path($dirname))) mkdir(base_path($dirname), 0775, true);
 
-            // Copy file content if it's a file
             if ($stats['size'] > 0) {
-                // We stop here if the file isn't writable
-                $path = "zip://" . $zipFile . "#{$updateFolder}/" . "$filename";
+                $path = base_path('tmp/' . $updateFolder . '/' . $filename);
                 $updateFile[$path] = base_path($filename);
                 $file = $updateFile[$path];
                 if (file_exists($file) && !is_writable($file)) {
-                    // $this->errorUpdate = $this->Lang->get('UPDATE__FAILED_FILE', [
-                    //     '{FILE}' => $file,
-                    // ]);
-                    // $this->log("The file " . $file . " is not writable!");
                     echo "The file " . $file . " is not writable!";
                     return false;
                 }
             }
         }
 
-        // We copy the files here
         foreach ($updateFile as $key => $v) {
-            $has_key = hash_file('sha1', $key);
-            $hash = hash_file('sha1', $v);
-            if($has_key == $hash)
-                continue;
             if (!copy($key, $v)) {
-                // $this->errorUpdate = $this->Lang->get('UPDATE__FAILED_FILE', [
-                //     '{FILE}' => $v,
-                // ]);
-                echo "Failed to copy file from $key to " . $v;
                 return false;
             }
-            echo "The file " .$v. " was replaced with success !";
         }
-
-        echo "End UPDATE";
 
         $zip->close();
 
-        // Remove zip
         @unlink($zipFile);
-
-        // Clear cache
-        // Cache::clearGroup(false, '_cake_core_');
-        // Cache::clearGroup(false, '_cake_model_');
-
-        // Update database
-        // return $this->updateDb();
+        
+        $dir = base_path('tmp/' . $updateFolder);
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST
+        );
+        
+        foreach ($files as $fileinfo) {
+            $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
+            $todo($fileinfo->getRealPath());
+        }
+        
+        rmdir($dir);
 
         Cache::flush();
 
