@@ -212,9 +212,9 @@
         <hr class="bg-secondary">
 
         <label class="fs-6 text-muted">Autre</label>
-        @if(Route::has('admin.update'))
+        @if(Route::has('admin.update.index'))
             <li class="nav-item mb-3">
-                <a href="{{ route('admin.update') }}" class="nav-link link-light text-decoration-none ps-2">
+                <a href="{{ route('admin.update.index') }}" class="nav-link link-light text-decoration-none ps-2">
                     <i class="bi bi-cloud-arrow-down-fill me-2"></i>
                     <span class="ml-2">
                         Mise à jour

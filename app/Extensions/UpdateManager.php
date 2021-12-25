@@ -69,7 +69,10 @@ class UpdateManager {
         $versions = $this->httpRequest($headers)
             ->get("https://api.github.com/repos/{$this->source['owner']}/{$this->source['repository']}/releases")
             ->json();
-        return $versions;
+        if(!empty($versions)) {
+            return $versions;
+        }
+        throw new \Exception('No versions availaible in repository.');
         
     }
 
