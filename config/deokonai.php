@@ -24,7 +24,7 @@ return [
         |
         */
 
-        'version' => env('DEOKONAI_VERSION', ''),
+        'version' => file_get_contents(base_path('VERSION.txt')) ?? '0.0.0',
 
         /*
         |--------------------------------------------------------------------------
