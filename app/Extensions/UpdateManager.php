@@ -163,9 +163,7 @@ class UpdateManager {
         $version = $update['version'];
         $zipFile = $update['downloadPath'];
         
-        if (!$zipFile) {
-            return false;
-        }
+        if (!$zipFile) { return false; }
 
         $zip = new ZipArchive;
         if ($zip->open($zipFile) !== true) return false;
