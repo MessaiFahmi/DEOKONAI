@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Extensions;
+namespace Deokonai\Extensions;
 
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;

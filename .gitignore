@@ -1,6 +1,7 @@
 /node_modules
 /public/hot
 /public/storage
+/public/assets/vendor/
 /storage/*.key
 /vendor
 .env
@@ -18,6 +19,4 @@ composer.lock
 package-lock.json
 /.git/
 .editorconfig
-/public/storage
-/storage/*.key
 

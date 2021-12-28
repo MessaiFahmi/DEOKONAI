@@ -17,7 +17,7 @@
         </nav>
     </div>
 
-    <div class="card shadow mb-4 fs-5">
+    <div class="card shadow mb-4">
         <div class="card-body p-4">
             My content here
         </div>

@@ -119,21 +119,53 @@
         <hr class="bg-secondary">
 
         <label class="fs-6 text-muted">Paramètres</label>
-        <li class="mb-1">
-            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
-                <i class="bi bi-sliders me-2"></i>
-                Paramètres
-            </button>
-            <div class="collapse show" id="home-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li><a href="{{ route('admin.settings.index') }}" class="link-light rounded">Général</a></li>
-                    <li><a href="#" class="link-light rounded">SEO</a></li>
-                    <li><a href="#" class="link-light rounded">Mail</a></li>
-                    <li><a href="#" class="link-light rounded">Performances</a></li>
-                    <li><a href="#" class="link-light rounded">Maintenance</a></li>
-                </ul>
-            </div>
-        </li>
+        @if(Route::has('admin.settings.index'))
+            <li class="mb-1">
+                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+                    <i class="bi bi-sliders me-2"></i>
+                    Paramètres
+                </button>
+                <div class="collapse show" id="home-collapse">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        @if(Route::has('admin.settings.index'))
+                            <li>
+                                <a href="{{ route('admin.settings.index') }}" class="link-light rounded">
+                                    Général
+                                </a>
+                            </li>
+                        @endif
+                        @if(Route::has('admin.settings.seo'))
+                            <li>
+                                <a href="{{ route('admin.settings.seo') }}" class="link-light rounded">
+                                    SEO
+                                </a>
+                            </li>
+                        @endif
+                        @if(Route::has('admin.settings.mail'))
+                            <li>
+                                <a href="{{ route('admin.settings.mail') }}" class="link-light rounded">
+                                    Mail
+                                </a>
+                            </li>
+                        @endif
+                        @if(Route::has('admin.settings.performance'))
+                            <li>
+                                <a href="{{ route('admin.settings.performance') }}" class="link-light rounded">
+                                    Performances
+                                </a>
+                            </li>
+                        @endif
+                        @if(Route::has('admin.settings.maintenance'))
+                            <li>
+                                <a href="{{ route('admin.settings.maintenance') }}" class="link-light rounded">
+                                    Maintenance
+                                </a>
+                            </li>
+                        @endif
+                    </ul>
+                </div>
+            </li>
+        @endif
 
         <li class="nav-item mb-3">
             <a href="{{ route('admin.index') }}" class="nav-link link-light text-decoration-none ps-2">
@@ -200,14 +232,14 @@
                 </span>
             </a>
         </li>
-        <li class="nav-item mb-3">
+        <!-- <li class="nav-item mb-3">
             <a href="{{ route('admin.index') }}" class="nav-link link-light text-decoration-none ps-2">
                 <i class="bi bi-arrow-90deg-right me-2"></i>
                 <span class="ml-2">
                     Redirections
                 </span>
             </a>
-        </li>
+        </li> -->
 
         <hr class="bg-secondary">
 

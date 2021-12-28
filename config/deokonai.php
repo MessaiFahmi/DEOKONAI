@@ -2,6 +2,8 @@
 
 return [
 
+    'is_deokonai_installed' => env('DEOKONAI_INSTALLED', false),
+
     'update' => [
 
         /*

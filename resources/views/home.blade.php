@@ -14,11 +14,13 @@
                         We focus on teaching our students the fundamentals of the latest
                         and greatest technologies to prepare them for their first dev role
                     </p>
-                    <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#enroll" >
-                    Start 7 The Enrollment
-                    </button>
+                    @can('admin-pannel')
+                        <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#enroll" >
+                        Start 7 The Enrollment
+                        </button>
+                    @endcan
                 </div>
-                <img class="img-fluid w-50 d-none d-sm-block" src="img/showcase.svg" alt="" />
+                <img class="img-fluid w-50 d-none d-sm-block" src="{{ asset('storage/img/showcase.svg') }}" alt="" />
             </div>
         </div>
     </section>
@@ -95,7 +97,7 @@
         <div class="container">
             <div class="row align-items-center justify-content-between">
                 <div class="col-md">
-                    <img src="img/fundamentals.svg" class="img-fluid" alt="" />
+                    <img src="{{ asset('storage/img/fundamentals.svg') }}" class="img-fluid" alt="" />
                 </div>
                 <div class="col-md p-5">
                     <h2>Learn The Fundamentals</h2>
@@ -137,7 +139,7 @@
                     </a>
                 </div>
                 <div class="col-md">
-                    <img src="img/react.svg" class="img-fluid" alt="" />
+                    <img src="{{ asset('storage/img/react.svg') }}" class="img-fluid" alt="" />
                 </div>
             </div>
         </div>
@@ -409,7 +411,6 @@
 @endsection
 
 @section('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous" ></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js"></script>
     <script>
         mapboxgl.accessToken = 'pk.eyJ1IjoiYnRyYXZlcnN5IiwiYSI6ImNrbmh0dXF1NzBtbnMyb3MzcTBpaG10eXcifQ.h5ZyYCglnMdOLAGGiL1Auw'
@@ -424,11 +425,11 @@
 
 @section('styles')
     <style>
-        body::before {
+        /* body::before {
             display: block;
             content: '';
             height: 60px;
-        }
+        } */
 
         #map {
             width: 100%;

@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Post;
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,23 +17,17 @@ class CreatePostsTable extends Migration
             $table->id();
             $table->string('title');
             $table->string('slug');
-            $table->string('category_id');
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->text('body');
-            $table->string('user_uuid');
-            $table->foreign('user_uuid')->references('uuid')->on('users');
+            $table->string('image')->nullable();
+            $table->text('content');
+            $table->boolean('is_published')->default(false);
+            $table->boolean('is_pinned')->default(false);
+            $table->string('user_id');
             $table->timestamps();
+
+            $table->foreign('image')->references('id')->on('images');
+            $table->foreign('user_id')->references('id')->on('users');
         });
 
-        for ($i=0; $i < 15; $i++) { 
-            Post::create([
-                'title' => 'Post ' . $i,
-                'slug' => 'post-' . $i,
-                'category_id' => 1,
-                'body' => 'Lorem Ipsum...',
-                'user_uuid' => User::all()->first()->uuid,
-            ]);
-        }
     }
 
     /**

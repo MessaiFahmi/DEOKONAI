@@ -1,112 +1,64 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\ImageController;
-use App\Http\Controllers\Admin\SettingsController;
-use App\Http\Controllers\PagesController;
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\Admin\UpdateController;
+use Deokonai\Http\Controllers\Admin\AdminController;
+use Deokonai\Http\Controllers\Admin\ImageController;
+use Deokonai\Http\Controllers\Admin\SettingsController;
+use Deokonai\Http\Controllers\PagesController;
+use Deokonai\Http\Controllers\PostController;
+use Deokonai\Http\Controllers\Admin\UpdateController;
+use Deokonai\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
 /**
- *  | Home route
- * -#------------
+ *  Routes
  */
 Route::get('/', [PagesController::class, 'home'])->name('home');
 Route::get('/home', [PagesController::class, 'home'])->name('home');
 
 
 /**
- *  | Login route
- * -#-------------
+ * Auth routes
  */
 Auth::routes();
 
 
-/**
- *  | Admin routes
- * -#--------------
- */
-Route::prefix('admin')->middleware(['auth','can:admin-pannel'])->group(function () {
-
-
- 
-    Route::get('/', [AdminController::class, 'index'])->name('admin.index'); // admin
-
-
-
-    Route::prefix('update')->group(function () {
-
-
-
-        Route::get('/', [UpdateController::class, 'index'])->name('admin.update.index'); // admin.update.index
-        Route::post('/update', [UpdateController::class, 'update'])->name('admin.update.update'); // admin.update.update
-
-
-
-    });
-
-
-
-    Route::prefix('/images')->group(function () {
-
-
-        
-        Route::get('/', [ImageController::class, 'index'])->name('admin.images.index'); // admin/images
-        Route::any('/create', [ImageController::class, 'create'])->name('admin.images.create'); // admin/images/create
-        Route::any('/edit/{id}', [ImageController::class, 'edit'])->name('admin.images.edit'); // admin/images/edit
-        Route::any('/delete/{id}', [ImageController::class, 'delete'])->name('admin.images.delete'); // admin/images/delete
-
-
-
-    });
-
-
-
-    Route::prefix('/settings')->group(function () {
-
-
-
-        Route::get('/', [SettingsController::class, 'index'])->name('admin.settings.index'); // admin/settings
-        // Route::post('/update', [SettingsController::class, 'update'])->name('admin.settings.update'); // admin/settings/update
-        // Route::get('/delete/{id}', [SettingsController::class, 'delete'])->name('admin.settings.delete'); // admin/settings/delete
-        // Route::get('/destroy/{id}', [SettingsController::class, 'destroy'])->name('admin.settings.destroy'); // admin/settings/destroy
-
-
-
-    });
-
-
-
-
-});
-
 
 /**
- *  | Posts routes
- * -#--------------
+ * Posts routes
  */
 Route::prefix('posts')->group(function() {
 
-
-
-    Route::get('/', [PostController::class, 'index']) // posts/
+    Route::get('/', [PostController::class, 'index']) // List
         ->name('posts.index');
-    Route::any('/create', [PostController::class, 'create']) // posts/create
-        ->middleware(['auth','can:posts-create'])
-        ->name('posts.create');
-    Route::any('/show/{id}', [PostController::class, 'show']) // posts/show/{id}
+    Route::any('/show/{id}', [PostController::class, 'show']) // Show
         ->name('posts.show');
-    Route::any('/edit/{id}', [PostController::class, 'edit']) // posts/edit/{id}
-        ->middleware(['auth','can:posts-edit'])
-        ->name('posts.edit');
-    Route::any('/delete/{id}', [PostController::class, 'delete']) // posts/delete/{id}
-        ->middleware(['auth','can:posts-delete'])
-        ->name('posts.delete');
-
-
     
 });
 
+
+
+/**
+ * Profiles routes
+ */
+Route::prefix('profiles')->group(function() {
+
+    Route::get('/', [ProfileController::class, 'index']) // List
+        ->name('profiles.index');
+    
+    Route::prefix('me')->middleware('auth')->group(function () {
+
+        Route::get('/', [ProfileController::class, 'me']) // Profile of logged user
+            ->name('profiles.me.index');
+        Route::any('/edit', [ProfileController::class, 'meEdit']) // Edit profile of logged user
+            ->name('profiles.me.edit');
+        Route::any('/delete', [ProfileController::class, 'meDelete']) // Delete profile of logged user
+            ->name('profiles.me.delete');
+
+    });
+
+    Route::any('/show/{id}', [ProfileController::class, 'show']) // Show
+        ->name('profiles.show');
+
+});

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace Deokonai\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Image;
+use Deokonai\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;

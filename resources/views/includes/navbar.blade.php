@@ -1,7 +1,7 @@
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 fixed-top">
+<nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 sticky-top">
     <div class="container">
-        <a href="#" class="navbar-brand">{{ config('app.name') }}</a>
+        <a href="{{ route('home') }}" class="navbar-brand">{{ config('app.name') }}</a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
             <span class="navbar-toggler-icon"></span>
@@ -32,7 +32,7 @@
                                 <li>
                                     <form action="{{ route('logout') }}" method="POST" class="dropdown-item">
                                         @csrf
-                                        <button type="submit" class="btn btn-clear-light p-0 text-white">
+                                        <button type="submit" class="btn btn-clear-light p-0 text-danger">
                                             <i class="bi mx-1 bi-box-arrow-right"></i>
                                             Déconnexion
                                         </button>
@@ -44,7 +44,7 @@
                                     <li class="dropdown-divider"></li>
                                     <li>
                                         <a href="{{ route('admin.index') }}" class="dropdown-item">
-                                            <i class="bi mx-1 bi-speedometer"></i>
+                                            <i class="bi mx-1 bi-speedometer2"></i>
                                             Dashboard
                                         </a>
                                     </li>

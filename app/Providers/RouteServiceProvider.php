@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Deokonai\Http\Controllers\PagesController;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -38,14 +39,18 @@ class RouteServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
 
         $this->routes(function () {
-            Route::prefix('api')
-                ->middleware('api')
-                ->namespace($this->namespace)
-                ->group(base_path('routes/api.php'));
+            
+            Route::prefix('api')->middleware('api')->group(base_path('routes/api.php'));
 
-            Route::middleware('web')
-                ->namespace($this->namespace)
-                ->group(base_path('routes/web.php'));
+            Route::middleware('web')->group(base_path('routes/web.php'));
+            
+            Route::middleware('web')->name('admin.')->group(base_path('routes/admin.php'));
+
+            if (! is_installed()) {
+                Route::prefix('install')->name('install.')->group(base_path('routes/install.php'));
+                Route::get('/', function() { return redirect()->route('install.index'); });
+            }
+
         });
     }
 

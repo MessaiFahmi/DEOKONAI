@@ -17,13 +17,13 @@ class CreateSettingsTable extends Migration
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->string('value');
+            $table->text('value');
             $table->timestamps();
         });
 
         Setting::create([
-            'name' => 'copyright',
-            'value' => 'Copyright © 2021 Deokonai - Tous droits réservés.',
+            'name' => 'DEOKONAI',
+            'value' => 'Copyright © 2021 DEOKONAI - Tous droits réservés.',
         ]);
     }
 
@@ -34,6 +34,6 @@ class CreateSettingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('images');
+        Schema::dropIfExists('settings');
     }
 }

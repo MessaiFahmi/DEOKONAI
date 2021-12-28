@@ -1,15 +1,33 @@
-<meta charset="UTF-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="@yield('description', setting('description', ''))">
+    <meta name="theme-color" content="#3490DC">
+    <meta name="author" content="Azuriom">
 
-<link href="https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css" rel="stylesheet" />
+    <meta property="og:title" content="@yield('title')">
+    <meta property="og:type" content="@yield('type', 'website')">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:image" content="{{ favicon() }}">
+    <meta property="og:description" content="@yield('description', setting('description', ''))">
+    <meta property="og:site_name" content="{{ site_name() }}">
+    @stack('meta')
 
-@if(isset($title))
-    <title>{{ config('app.name') . ": " . $title }}</title>
-@else
-    <title>{{ config('app.name') }}</title>
-@endif
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<link href="{{ asset('css/app.css') }}" rel="stylesheet">
-<link href="{{ asset('css/main.css') }}" rel="stylesheet">
-@yield('styles')
+    <title>@yield('title') | {{ site_name() }}</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ favicon() }}">
+
+    <!-- Scripts -->
+    <script src="{{ asset('vendor/jquery/jquery.min.js') }}" defer></script>
+    <script src="{{ asset('vendor/axios/axios.min.js') }}" defer></script>
+    <script src="{{ asset('js/script.js') }}" defer></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap-icons/font/bootstrap-icons.css') }}">
+
+    <title>Hello, world!</title>

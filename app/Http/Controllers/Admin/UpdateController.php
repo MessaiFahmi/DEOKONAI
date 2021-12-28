@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace Deokonai\Http\Controllers\Admin;
 
-use App\Extensions\UpdateManager;
+use Deokonai\Extensions\UpdateManager;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 

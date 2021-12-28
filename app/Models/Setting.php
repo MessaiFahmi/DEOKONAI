@@ -2,35 +2,73 @@
 
 namespace Deokonai\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
-class Setting extends Model {
+/**
+ * @property int $id
+ * @property string $name
+ * @property string $value
+ */
+class Setting extends Model
+{
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = false;
 
-    use HasFactory;
-
-    public $fillable = [
-        'name',
-        'value',
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'value',
     ];
 
-    public static function updateSettings($key, $value = null) {
+    /**
+     * Set a given settings values.
+     *
+     * @param  array|string  $key
+     * @param  mixed  $value
+     * @return void
+     */
+    public static function updateSettings($name, $value = null)
+    {
+        $names = is_array($name) ? $name : [$name => $value];
 
-        $keys = is_array($key) ? $key : [$key => $value];
-
-        foreach ($keys as $key => $value) {
+        foreach ($names as $name => $value) {
             if ($value !== null) {
-                self::updateOrCreate(['name' => $key], ['value' => $value]);
+                self::updateOrCreate(['name' => $name], ['value' => $value]);
             } else {
-                self::where('name', $key)->delete();
+                self::where('name', $name)->delete();
             }
-
-            setting()->set($key, $value);
+            
         }
 
         Cache::forget('settings');
-        
     }
 
+    public static function get($name, $default = null){
+
+        return self::where('name', $name)->first()->value ?? $default;
+
+    }
+
+    public static function has($name){
+
+        return self::where('name', $name)->exists();
+
+    }
+
+    public function set($name, $value = null) {
+
+        $names = is_array($name) ? $name : [$name => $value];
+
+        foreach ($names as $name => $value) {
+            Setting::updateOrCreate(['name' => $name], ['value' => $value]);
+        }
+    }
 }

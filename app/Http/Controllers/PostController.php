@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Deokonai\Http\Controllers;
 
-use App\Models\Post;
+use App\Http\Controllers\Controller;
+use Deokonai\Models\Post;
 use Illuminate\Http\Request;
 
 class PostController extends Controller {

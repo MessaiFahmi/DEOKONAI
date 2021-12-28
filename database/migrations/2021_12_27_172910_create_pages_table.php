@@ -1,11 +1,10 @@
 <?php
 
-use App\Models\Category;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCategoriesTable extends Migration
+class CreatePagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,17 +13,15 @@ class CreateCategoriesTable extends Migration
      */
     public function up()
     {
-
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('pages', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('title');
+            $table->string('description');
+            $table->string('slug')->unique();
+            $table->text('content');
+            $table->boolean('is_enabled')->default(true);
             $table->timestamps();
         });
-
-        Category::create([
-            'name' => 'Sport'
-        ]);
-        
     }
 
     /**
@@ -34,6 +31,6 @@ class CreateCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('pages');
     }
 }
